@@ -1,0 +1,25 @@
+name: PR Dependency Check (example)
+
+# Copy this file into another repo's .github/workflows/ to enable the check there.
+# Then add the 'check-dependencies' job to that repo's Required Status Checks
+# in branch protection rules.
+
+on:
+  pull_request:
+    # Re-run whenever any of these change so the sticky comment stays accurate.
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  check-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: BoBeenLee/pr-dependency-guard@v1
+        with:
+          # PRs targeting branches not in this list pass silently.
+          target-branches: 'main,develop'
+          # Apply this label to a PR to bypass the check.
+          bypass-label: 'skip-dependency-check'
